@@ -1,5 +1,6 @@
-package com.example.bucaminas.modelo;
+package com.poli.bucaminas.modelo;
 
+import javafx.scene.control.Alert;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -30,9 +31,10 @@ public class Celda extends StackPane {
 
     private void configurarApariencia() {
         borde.setStroke(Color.LIGHTGRAY);
+        borde.setFill(Color.BLUE);
         texto.setFont(Font.font(18));
         texto.setVisible(false);
-        texto.setText(tieneBomba ? "X" : "");
+        texto.setText(tieneBomba ? ":(" : "");
 
         getChildren().addAll(borde, texto);
         setTranslateX(x * Tablero.TAMANO_CELDA);
@@ -52,13 +54,37 @@ public class Celda extends StackPane {
 
         if (tieneBomba) {
             System.out.println("¡Game Over!");
-            tablero.reiniciarJuego();
+//            tablero.reiniciarJuego();
+            tablero.deshabilitarTablero(); // Detiene el juego
+            tablero.revelarBombas(); // Revela todas las bombas
+            Alert alerta = new Alert(Alert.AlertType.INFORMATION);
+            alerta.setTitle("Game Over");
+            alerta.setHeaderText(null);
+            alerta.setContentText("¡Has perdido! Inicia una nueva partida.");
+            alerta.showAndWait();
         } else if (texto.getText().isEmpty()) {
             tablero.obtenerVecinas(this).forEach(Celda::abrir);
+        }
+        // Verifica si el usuario ha ganado
+        if (tablero.verificarVictoria()) {
+            tablero.mostrarAlertaVictoria();
         }
     }
 
     public void establecerTexto(String valor) {
         texto.setText(valor);
     }
+
+    public void revelar() {
+        if (!estaAbierta) {
+            estaAbierta = true;
+            texto.setVisible(true);
+            borde.setFill(null);
+        }
+    }
+
+    public boolean estaAbierta() {
+        return estaAbierta;
+    }
+
 }

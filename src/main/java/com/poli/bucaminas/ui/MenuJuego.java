@@ -1,6 +1,6 @@
-package com.example.bucaminas.ui;
+package com.poli.bucaminas.ui;
 
-import com.example.bucaminas.modelo.Tablero;
+import com.poli.bucaminas.modelo.Tablero;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
@@ -14,7 +14,7 @@ public class MenuJuego {
 
     public MenuBar crearBarraMenu() {
         MenuBar barraMenu = new MenuBar();
-        Menu menuOpciones = new Menu("Opciones");
+        Menu menuOpciones = new Menu("Juego nuevo");
 
         menuOpciones.getItems().addAll(
                 crearElementoMenu("10x10", 10, 10),

@@ -1,9 +1,11 @@
-package com.example.bucaminas.modelo;
+package com.poli.bucaminas.modelo;
 
-import com.example.bucaminas.ui.MenuJuego;
+import com.poli.bucaminas.ui.MenuJuego;
 import javafx.scene.Parent;
+import javafx.scene.control.Alert;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +37,7 @@ public class Tablero {
 
         for (int y = 0; y < altoTablero; y++) {
             for (int x = 0; x < anchoTablero; x++) {
-                Celda celda = new Celda(x, y, Math.random() < 0.2, this);
+                Celda celda = new Celda(x, y, Math.random() < 0.15, this);
                 tablero[x][y] = celda;
                 contenedorTablero.getChildren().add(celda);
             }
@@ -87,4 +89,47 @@ public class Tablero {
     public void reiniciarJuego() {
         diseño.setCenter(crearTablero());
     }
+
+    public void deshabilitarTablero() {
+        for (int y = 0; y < altoTablero; y++) {
+            for (int x = 0; x < anchoTablero; x++) {
+                tablero[x][y].setDisable(true);
+            }
+        }
+    }
+
+    public void revelarBombas() {
+        for (int y = 0; y < altoTablero; y++) {
+            for (int x = 0; x < anchoTablero; x++) {
+                Celda celda = tablero[x][y];
+                if (celda.tieneBomba) {
+                    celda.revelar();
+                }
+            }
+        }
+    }
+
+    public boolean verificarVictoria() {
+        for (int y = 0; y < altoTablero; y++) {
+            for (int x = 0; x < anchoTablero; x++) {
+                Celda celda = tablero[x][y];
+                // El usuario gana si todas las celdas sin bombas están abiertas
+                if (!celda.tieneBomba && !celda.estaAbierta()) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public void mostrarAlertaVictoria() {
+        Alert alerta = new Alert(Alert.AlertType.INFORMATION);
+        alerta.setTitle("¡Victoria!");
+        alerta.setHeaderText(null);
+        alerta.setContentText("¡Felicidades! Has descubierto todas las celdas sin bombas.");
+        alerta.showAndWait();
+
+        reiniciarJuego();
+    }
+
 }
